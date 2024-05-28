@@ -1,5 +1,7 @@
 <script setup>
+//路由
 import { useRouter } from "vue-router";
+//用户信息
 import { useUserStore } from "@/stores/user.js";
 import { computed, onBeforeMount, ref } from "vue";
 import { Back, Plus } from '@element-plus/icons-vue'
@@ -124,16 +126,91 @@ const MakePrev = () => {
   }
   show.value = true
 }
+
 const empty = []
+const valueTopic = ref('')
+const valueUser = ref('')
+const valueEmoji = ref('')
+const topics = [
+  {
+    value: "study",
+    label: "学习"
+  },
+  {
+    value: "selectCourse",
+    label: "选课"
+  },
+  {
+    value: "carpool",
+    label: "拼车"
+  },
+  {
+    value: "internship",
+    label: "实习"
+  },
+  {
+    value: "makeFriends",
+    label: "交友"
+  },
+]
+//获取用户信息
+
+
+const user = [
+  {
+    value: "user1",
+    label: "用户1"
+  },
+  {
+    value: "user2",
+    label: "用户2"
+  }
+]
+
+const emoji = [
+  {
+    value: "😀",
+    label: "😀 开心"
+  },
+  {
+    value: "🤣",
+    label: "🤣 笑死了"
+  },
+  {
+    value: "😂",
+    label: "😂 笑哭了"
+  },
+  {
+    value: "😁",
+    label: "😁 嘻嘻"
+  },
+  {
+    value: "😍",
+    label: "😍 花痴"
+  },
+  {
+    value: "😘",
+    label: "😘 飞吻"
+  },
+  {
+    value: "😒",
+    label: "😒 不高兴"
+  },
+  {
+    value: "😎",
+    label: "😎  墨镜笑脸"
+  },
+]
+
 </script>
 
 <template>
   <div>
     <div class="box">
-      <h1 style="text-align: left;margin-left:20px">发布图文</h1>
+      <h1 style="text-align: left;margin-left:20px;font-size:20px">发布图文</h1>
       <div class="topArea">
+        <div style="font-size: large;">图片编辑</div>
         <div class="img-container">
-          <div style="font-size: large;">图片编辑</div>
           <el-upload v-model:file-list="fileList" action="http://localhost:8000/upload/" class="preview" ref="upload"
             list-type="picture-card" multiple :headers="userStore.headersObj" :limit="9"
             :on-preview="handlePictureCardPreview" :on-change="handleChange" :auto-upload="false"
@@ -144,19 +221,31 @@ const empty = []
           </el-upload>
         </div>
       </div>
-      <div class="rightArea">
+      <div class="bottomArea">
         <div class="content-container">
           <el-input v-model="title" maxlength="20" placeholder="请输入标题" show-word-limit type="text"
             style="margin-top: 10px;width: 80%;margin-left: 20px;" />
           <div style="margin: 20px 0" />
-          <el-input v-model="content" maxlength="3000" placeholder="请输入内容" show-word-limit type="textarea"
-            style="width: 80%;margin-left: 20px; margin-top: 20px" autosize />
+          <el-input v-model="content" maxlength="300" placeholder="请输入内容" show-word-limit type="textarea"
+            style="width: 80%;margin-left: 20px; margin-top: 20px;" autosize />
         </div>
       </div>
       <div class="extra-info">
-        <el-button style="width: 80px;">#话题</el-button>
-        <el-button style="width: 80px;">@用户</el-button>
-        <el-button style="width: 80px;">😀表情</el-button>
+        <el-select v-model="valueTopic" placeholder="#话题" style="width: 100px; height: 30px;margin-right: 20px;">
+          <el-option v-for="item in topics" :key="item.value" :label="item.label" :value="item.value"></el-option>
+          <!-- <el-option>学习</el-option>
+          <el-option>选课</el-option>
+          <el-option>拼车</el-option>
+          <el-option>实习</el-option>
+          <el-option>交友</el-option> -->
+        </el-select>
+        <el-select v-model="valueUser" placeholder="@用户" style="width: 100px; height: 30px;margin-right: 20px;">
+          <el-option v-for="item in user" :key="item.value" :label="item.label" :value="item.value"></el-option>
+        </el-select>
+
+        <el-select v-model="valueEmoji" placeholder="😊表情" style="width: 100px; height: 30px;margin-right: 20px;">
+          <el-option v-for="item in emoji" :key="item.value" :label="item.label" :value="item.value"></el-option>
+        </el-select>
       </div>
 
       <el-button style="margin-top: 20px;margin-left: 45px; color:white;" round color="#fd5656" size="large"
@@ -204,6 +293,7 @@ const empty = []
 .img-container {
   display: block;
   margin: auto;
+  margin-top: 10px;
   width: 550px;
   height: 180px;
   overflow: scroll;
@@ -218,7 +308,7 @@ const empty = []
 }
 
 
-.rightArea {
+.bottomArea {
   display: block;
   margin: auto;
   width: 550px;
@@ -227,7 +317,7 @@ const empty = []
 .content-container {
   margin-top: px;
   height: 150px;
-  overflow: scroll;
+  /* overflow: scroll; */
 }
 
 .extra-info {
@@ -239,11 +329,12 @@ const empty = []
 }
 
 .preview {
-  margin: 22px;
+  margin: 0, auto;
 }
 
 .overlay {
   position: fixed;
+  margin: auto;
   top: 0;
   left: 0;
   width: 100%;
