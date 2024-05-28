@@ -223,11 +223,13 @@ const emoji = [
       </div>
       <div class="bottomArea">
         <div class="content-container">
-          <el-input v-model="title" maxlength="20" placeholder="请输入标题" show-word-limit type="text"
+          <div style="margin-left: 19px;font-family: STXihei">标题</div>
+          <el-input v-model="title" maxlength="20" placeholder="填写标题，可能会有更多赞哦~" show-word-limit type="text"
             style="margin-top: 10px;width: 80%;margin-left: 20px;" />
           <div style="margin: 20px 0" />
-          <el-input v-model="content" maxlength="300" placeholder="请输入内容" show-word-limit type="textarea"
-            style="width: 80%;margin-left: 20px; margin-top: 20px;" autosize />
+          <div style="margin-left: 19px">内容</div>
+          <el-input v-model="content" maxlength="300" placeholder="填写更全面的描述信息，让更多人看到你吧！" show-word-limit type="textarea"
+            :rows=4 style="width: 80%;margin-left: 20px; margin-top: 10px; " />
         </div>
       </div>
       <div class="extra-info">
@@ -265,7 +267,6 @@ const emoji = [
         </button>
         <card-detail :detail="postData" :comments="empty" :review="true" />
       </div>
-      <!-- <div style="height: 120px;width: 120px;background-color: red;"></div> -->
     </div>
   </div>
 </template>
@@ -273,7 +274,7 @@ const emoji = [
 <style scoped>
 /* 背景框图 */
 .box {
-  height: 580px;
+  height: 600px;
   width: 600px;
   margin: auto;
   /* display: flex; */
@@ -286,16 +287,18 @@ const emoji = [
   display: block;
   margin: auto;
   width: 550px;
-  height: 180px;
-  /* background-color: rebeccapurple; */
+  height: 150px;
+  font-family:
+    /* background-color: rebeccapurple; */
 }
 
 .img-container {
   display: block;
   margin: auto;
+  margin-left: 20px;
   margin-top: 10px;
   width: 550px;
-  height: 180px;
+  height: 150px;
   overflow: scroll;
 }
 
@@ -312,15 +315,18 @@ const emoji = [
   display: block;
   margin: auto;
   width: 550px;
+
+
 }
 
 .content-container {
-  margin-top: px;
-  height: 150px;
+  margin-top: 20px;
+  height: 230px;
   overflow: scroll;
 }
 
 .extra-info {
+  margin-top: 8px;
   margin-left: 45px;
 }
 
