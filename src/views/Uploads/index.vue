@@ -317,7 +317,7 @@ const emoji = [
 .content-container {
   margin-top: px;
   height: 150px;
-  /* overflow: scroll; */
+  overflow: scroll;
 }
 
 .extra-info {
