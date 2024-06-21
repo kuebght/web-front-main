@@ -87,6 +87,9 @@ const doUploads = async () => {
     title: title.value,
     content: content.value,
     user_id: userStore.userInfo.id,
+    topic: valueTopic.value,
+    user: valueUser.value,
+    emoji: valueEmoji.value,
   }
 
   const res = await uploadPost(data)
@@ -98,6 +101,8 @@ const doUploads = async () => {
   }, 3000)
 
 }
+
+
 //处理图片数量
 const handleExceed = () => {
   ElMessage.warning(
