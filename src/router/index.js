@@ -1,4 +1,4 @@
-import {createRouter, createWebHistory} from 'vue-router';
+import { createRouter, createWebHistory } from 'vue-router';
 
 const Home = () => import('@/views/Home/index.vue');
 const Login = () => import('@/views/Login/index.vue');
@@ -8,7 +8,9 @@ const UserIndex = () => import('@/views/UserIndex/index.vue');
 const Uploads = () => import('@/views/Uploads/index.vue');
 const NotFound = () => import('@/views/NotFound/index.vue');
 const UserPostControl = () => import('@/views/UserPostControl/index.vue');
-import {useUserStore} from "@/stores/user";
+import AdminLogin from '../views/AdminLogin/index.vue'
+
+import { useUserStore } from "@/stores/user";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -65,6 +67,13 @@ const router = createRouter({
             },
         },
         {
+            path: '/admin',
+            component: AdminLogin,
+            meta: {
+                title: '欢迎来到管理员界面',
+            },
+        },
+        {
             path: '/:catchAll(.*)',
             component: NotFound,
             meta: {
@@ -75,7 +84,7 @@ const router = createRouter({
 });
 router.beforeEach((to, from, next) => {
     // 获取目标路由的相关信息，例如路由元信息 meta
-    const {meta} = to;
+    const { meta } = to;
 
     // 获取用户信息
     const userStore = useUserStore();
