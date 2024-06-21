@@ -1,7 +1,7 @@
 <template>
     <div>
         <el-card class="box-card">
-            <h2>管理员登录</h2>
+            <h2 style="text-align: center;">管理员登录</h2>
             <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-position="left"
                 label-width="70px" class="login-from">
                 <el-form-item label="用户名" prop="name">
@@ -12,8 +12,9 @@
                 </el-form-item>
             </el-form>
             <div class="btnGroup">
-                <el-button type="primary" @click="submitForm('ruleForm')" v-loading="loading">登录</el-button>
-                <el-button @click="resetForm('ruleForm')" style="background: skyblue">重置</el-button>
+                <el-button style="margin-left: 110px;" type="primary" @click="submitForm('ruleForm')"
+                    v-loading="loading">登录</el-button>
+                <el-button @click="resetForm('ruleForm')" style="background: skyblue;margin-left: 30px;">重置</el-button>
             </div>
         </el-card>
     </div>
@@ -92,6 +93,7 @@ export default {
 <style scoped>
 .box-card {
     margin: auto auto;
+    margin-top: 50px;
     width: 400px;
 }
 
