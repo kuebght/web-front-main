@@ -150,6 +150,10 @@ const valueTopic = ref('')
 const valueUser = ref('')
 const valueEmoji = ref('')
 const topics = [
+{
+    value: "日常",
+    label: "日常"
+  },
   {
     value: "学习",
     label: "学习"
