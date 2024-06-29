@@ -85,11 +85,11 @@ const doUploads = async () => {
   }
   const data = {
     title: title.value,
-    content: content.value,
+    content: content.value + valueEmoji.value,
     user_id: userStore.userInfo.id,
-    topic: valueTopic.value,
+    category: valueTopic.value,
     user: valueUser.value,
-    emoji: valueEmoji.value,
+    // emoji: valueEmoji.value,
   }
 
   const res = await uploadPost(data)
@@ -144,23 +144,23 @@ const valueUser = ref('')
 const valueEmoji = ref('')
 const topics = [
   {
-    value: "study",
+    value: "学习",
     label: "学习"
   },
   {
-    value: "selectCourse",
+    value: "选课",
     label: "选课"
   },
   {
-    value: "carpool",
+    value: "拼车",
     label: "拼车"
   },
   {
-    value: "internship",
+    value: "实习",
     label: "实习"
   },
   {
-    value: "makeFriends",
+    value: "交友",
     label: "交友"
   },
 ]
@@ -169,12 +169,12 @@ const topics = [
 
 const user = [
   {
-    value: "user1",
-    label: "用户1"
+    value: "用户1",
+    label: "wer"
   },
   {
-    value: "user2",
-    label: "用户2"
+    value: "用户2",
+    label: "er"
   }
 ]
 
@@ -212,18 +212,18 @@ const emoji = [
     label: "😎  墨镜笑脸"
   },
 ]
-
+const afterDoComment = (comment) => Details.afterDoComment(comment);
 </script>
 
 <template>
-  <div>
-    <div class="box">
+  <div style="height: 1200px;">
+    <div class="boxw">
       <h1 style="text-align: left;margin-left:20px;font-size:20px">发布图文</h1>
       <div class="topArea">
         <div style="font-size: large;">图片编辑</div>
         <div class="img-container">
-          <el-upload v-model:file-list="fileList" action="http://localhost:8000/upload/" class="preview" ref="upload"
-            list-type="picture-card" multiple :headers="userStore.headersObj" :limit="9"
+          <el-upload v-model:file-list="fileList" action="http://123.60.149.233:8000/upload/" class="preview"
+            ref="upload" list-type="picture-card" multiple :headers="userStore.headersObj" :limit="9"
             :on-preview="handlePictureCardPreview" :on-change="handleChange" :auto-upload="false"
             :on-exceed="handleExceed" :data="Post" :before-upload="beforeUpload" :on-error="onError">
             <el-icon>
@@ -262,7 +262,7 @@ const emoji = [
       <el-button style="margin-top: 20px; margin-left: 30px" round type="primary" size="large"
         @click="MakePrev">生成预览</el-button>
       <el-dialog v-model="dialogVisible">
-        <img :src="dialogImageUrl" alt="Preview Image" />
+        <img :src="dialogImageUrl" style="width: 100%;" alt="Preview Image" />
       </el-dialog>
 
       <div class="overlay" v-if="show">
@@ -271,22 +271,35 @@ const emoji = [
             <Back />
           </el-icon>
         </button>
-        <card-detail :detail="postData" :comments="empty" :review="true" />
+        <!-- <card-detail :detail="postData" :comments="empty" :review="true" /> -->
+        <!-- <card-detail :detail="postData" :comments="null" :review="true" /> -->
+        <card-detail :detail="postData" :isShow="false" :review="true" />
       </div>
     </div>
   </div>
 </template>
 
 <style scoped>
+.body {
+  height: 900px;
+}
+
 /* 背景框图 */
-.box {
+.boxw {
   height: 600px;
   width: 600px;
+  /* position: absolute; */
+  overflow-y: scroll;
   margin: auto;
   /* display: flex; */
   /* flex-direction: column; */
   border-radius: 20px;
   border: #2c3e50 1px solid;
+  overflow: auto;
+}
+
+.card .el-row {
+  padding-left: 100px;
 }
 
 .topArea {
@@ -294,8 +307,7 @@ const emoji = [
   margin: auto;
   width: 550px;
   height: 150px;
-  font-family:
-    /* background-color: rebeccapurple; */
+  /* background-color: rebeccapurple; */
 }
 
 .img-container {
@@ -341,19 +353,28 @@ const emoji = [
 }
 
 .preview {
-  margin: 0, auto;
+  width: 550px;
+  height: 150px;
+  margin: 22px;
 }
 
+/* 预览层卡牌 */
+.card {
+  margin-left: 10px;
+  padding-left: 50px;
+}
+
+/* 预览层父元素 */
 .overlay {
   position: fixed;
-  margin: auto;
+  margin: 0 auto;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   background-color: white;
   /* 设置透明度的背景色 */
-  z-index: 9999;
+  z-index: 99999;
   /* 设置一个较大的z-index值，确保图层位于其他内容之上 */
 }
 
