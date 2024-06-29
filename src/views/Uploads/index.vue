@@ -97,7 +97,6 @@ const doUploads = async () => {
     user_id: userStore.userInfo.id,
     category: valueTopic.value,
     user: valueUser.value,
-    // emoji: valueEmoji.value,
   }
 
   const res = await uploadPost(data)
@@ -253,7 +252,9 @@ const afterDoComment = (comment) => Details.afterDoComment(comment);
           <el-option v-for="item in topics" :key="item.value" :label="item.label" :value="item.value"></el-option>
         </el-select>
         <el-select v-model="valueUser" placeholder="@用户" style="width: 100px; height: 30px;margin-right: 20px;">
-          <el-option v-for="item in followInfo" :key="item.value" :label="item.label" :value="item.value"></el-option>
+          <el-option v-for="item in followInfo" :key="item.value" :label="item.label"
+            :value="item.username"></el-option>
+
         </el-select>
 
         <el-select v-model="valueEmoji" placeholder="😊表情" style="width: 100px; height: 30px;margin-right: 20px;">
