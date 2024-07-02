@@ -238,6 +238,7 @@ h2{
   position: absolute;
   left: 350px;
   top: 100px;
+  display: flex;
 }
 
 .box {

@@ -13,7 +13,7 @@ import AdminLogin from '../views/AdminLogin/index.vue'
 import { useUserStore } from "@/stores/user";
 
 const router = createRouter({
-    history: createWebHistory(import.meta.env.BASE_URL),
+    history: createWebHistory(import.meta.env.BASE_URL),//BASE_URL是一个全局变量，它是在vite.config.js中配置的
     routes: [
         {
             path: '/',
@@ -54,7 +54,72 @@ const router = createRouter({
                     path: 'user/control',
                     component: UserPostControl,
                     meta: {
-                        title: '信息管理 .TJ论坛',
+                        title: '消息通知 .TJ论坛',
+                        showfater: true
+                    },
+                    children: [
+
+                        // {
+                        //   path: "/message",
+                        //   component: () => import("@/views/UserPostControl/children/message.vue"),
+                        //   name: "message", // 用于 keep-alive, 必须与SFC自动推导或者显示声明的组件name一致
+                        // },
+
+                        {
+                          path: "message",
+                          component: () => import("@/views/UserPostControl/children/message.vue"),
+                          name: "message", // 用于 keep-alive, 必须与SFC自动推导或者显示声明的组件name一致
+                          meta:{
+                            showfater: true
+                         }
+                        },
+
+                        {
+                          path: "agree",
+                          component: () => import("@/views/UserPostControl/children/agree.vue"),
+                          name: "agree", // 用于 keep-alive, 必须与SFC自动推导或者显示声明的组件name一致
+                          meta:{
+                            showfater: true
+                         }
+                        },
+                        {
+                            path: "collection",
+                            component: () => import("@/views/UserPostControl/children/collection.vue"),
+                            name: "collection", // 用于 keep-alive, 必须与SFC自动推导或者显示声明的组件name一致
+                            meta:{
+                                showfater: true
+                             }
+                          },
+                        {
+                          path: "follower",
+                          component: () => import("@/views/UserPostControl/children/follower.vue"),
+                          name: "follower", // 用于 keep-alive, 必须与SFC自动推导或者显示声明的组件name一致
+                          meta:{
+                            showfater: true
+                         }
+                        },
+                        {
+                          path: "comment",
+                          component: () => import("@/views/UserPostControl/children/comment.vue"),
+                          name: "comment", // 用于 keep-alive, 必须与SFC自动推导或者显示声明的组件name一致
+                          meta:{
+                            showfater: true
+                         }
+                        },
+                      ],                           
+                },
+                {
+                    path: 'manager',
+                    component: () => import("@/views/manager/manager.vue"),
+                    meta: {
+                        title: '用户管理 .TJ论坛',
+                    },
+                },
+                {
+                    path: 'single/:id',
+                    component: () => import("@/views/manager/single.vue"),
+                    meta: {
+                        title: '用户管理 .TJ论坛',
                     },
                 },
             ],

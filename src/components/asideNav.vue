@@ -2,29 +2,29 @@
 import {ref} from "vue";
 import {Promotion, Expand, Close, Tools, Bell} from "@element-plus/icons-vue";
 import {useUserStore} from "@/stores/user";
-import Login from '@/views/Login/index.vue'
+import Login from '@/views/Login/index.vue';
 import {ElMessage} from "element-plus";
-import {genFileId} from 'element-plus'
-import {updateUserInfo} from "@/apis/main";
 import router from "@/router";
 
-const userStore = useUserStore()
+const userStore = useUserStore();
 // 控制菜单样式
-const isMenuOpen = ref(false)
+const isMenuOpen = ref(false);
 const toggleMenu = () => {
   isMenuOpen.value = !isMenuOpen.value;
-}
+};
+
 // 登出
 const confirm = async () => {
-  const res = await userStore.userLogout()
-  ElMessage({type: 'success', message: res.info})
-  router.push({path:'/'}) //登出后跳到“发现”主页
-}
+  const res = await userStore.userLogout();
+  ElMessage({type: 'success', message: res.info});
+  router.push({path: '/'}); //登出后跳到“发现”主页
+};
+
 // 显示登录界面
-const show = ref(false)
+const show = ref(false);
 const changeShow = () => {
   show.value = !show.value;
-}
+};
 </script>
 
 <template>
@@ -51,7 +51,7 @@ const changeShow = () => {
       <li class="menuBreak"> 
         <hr>
       </li>
-      <li class="menuItem">
+      <li class="menuItem" v-if="userStore.userInfo.status != 2">
         <el-tooltip effect="dark" content="发布" placement="right">
           <RouterLink to="/user/uploads" class="menuOption">
             <el-icon size="x-large">
@@ -61,7 +61,7 @@ const changeShow = () => {
           </RouterLink>
         </el-tooltip>
       </li>
-      <li class="menuItem" v-if="userStore.userInfo.id">
+      <li class="menuItem" v-if="userStore.userInfo.id && userStore.userInfo.status != 2">
         <el-tooltip effect="dark" content="通知" placement="right">
           <RouterLink to="/user/control">
             <div class="menuOption">
@@ -71,17 +71,30 @@ const changeShow = () => {
           </RouterLink>
         </el-tooltip>
       </li>
+      <li class="menuItem" v-if="userStore.userInfo.id && userStore.userInfo.status === 0">
+        <el-tooltip effect="dark" content="用户管理" placement="right">
+          <RouterLink to="/manager">
+            <div class="menuOption">
+              <el-icon size="x-large">
+                <Tools/>
+              </el-icon>
+              <h5 class="menuText" :class="{ open2: isMenuOpen }">用户管理</h5>
+            </div>
+          </RouterLink>
+        </el-tooltip>
+      </li>
     </ul>
     <div class="about" id="about">
     </div>
-    <div v-if="userStore.userInfo.id">
+    <div v-if="userStore.userInfo.id && userStore.userInfo.status != 2">
       <div class="menuUser">
         <RouterLink :to="`/user/index/${userStore.userInfo.id}`">
           <div>
             <img :src="userStore.userInfo.avatar" alt="">
           </div>
           <h5 class="Username menuText" :class="{ open2: isMenuOpen }" v-show="isMenuOpen">
-            {{ userStore.userInfo.username }}</h5>
+            {{ userStore.userInfo.username }}
+          </h5>
           <p class="menuText" :class="{ open2: isMenuOpen }"><i class="iconfont icon-youjiantou"></i></p>
         </RouterLink>
       </div>
@@ -92,7 +105,7 @@ const changeShow = () => {
             <el-popconfirm @confirm="confirm" title="确认退出吗?" confirm-button-text="确认"
                            cancel-button-text="取消">
               <template #reference>
-                <button type="button" ><i class="iconfont icon-tuichu"></i></button>
+                <button type="button"><i class="iconfont icon-tuichu"></i></button>
               </template>
             </el-popconfirm>
           </div>
@@ -120,12 +133,11 @@ const changeShow = () => {
         <Close/>
       </el-icon>
     </el-button>
-    <login @changeShow="changeShow"/>
+    <login @changeShow="changeShow" class="login"/>
   </div>
 </div>
-  
-
 </template>
+
 
 <style scoped>
 
@@ -137,17 +149,23 @@ const changeShow = () => {
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5); /* 设置透明度的背景色 */
   z-index: 9999; /* 设置一个较大的z-index值，确保图层位于其他内容之上 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.login{
+  /* position: absolute; */
+  position: fixed;
 }
 
 .close {
   border: 0;
   position: absolute;
-  left: 70%;
-  top: 18%;
+  left: 68%;
+  top: 17%;
   background-color: #fff;
   z-index: 1000; /* 设置一个较大的z-index值，确保图层位于其他内容之上 */
 }
-
 
 * {
   margin: 0;
@@ -162,7 +180,7 @@ const changeShow = () => {
 .menu {
   position: absolute;
   width: 60px;
-  height: auto;
+  height: 86%;
   background-color: #f3f5f6;
   z-index: 2;
   top: 65px;
@@ -321,8 +339,10 @@ const changeShow = () => {
 .menu .themeBar {
   overflow: hidden;
   width: 100%;
-  height: 10%;
+  height: 5%;
   padding: 0.5rem;
+  position: absolute; /* 绝对定位 */
+  bottom: 6%; /* 距离父元素底部20px */
 }
 
 .menu .themeBar div {
@@ -354,6 +374,8 @@ const changeShow = () => {
 }
 
 .menu .menuUser {
+  position: absolute; /* 设置绝对定位 */
+  bottom: 15%; /* 设置距离父元素底部的距离，例如20px */
   width: 100%;
   height: 10%;
 }

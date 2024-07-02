@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 import {onMounted, ref} from "vue";
 import HomeCard from "@/components/homeCard.vue";
 import {Back} from "@element-plus/icons-vue";
@@ -8,8 +8,12 @@ import {useRoute} from "vue-router";
 import {controlDetail} from "@/stores/controlDetail";
 import {onClickOutside} from '@vueuse/core';
 import {resizeWaterFall, waterFallInit, waterFallMore} from "@/utils/waterFall";
+import { ElLoading } from 'element-plus';
+import 'element-plus/theme-chalk/el-loading.css';
 
 const query = useRoute().query.query
+//route.query.query访问名为query的查询参数的值。例如，如果当前URL是/somepath?query=value，那么route.query.query的值将是value。
+// 获得搜索值
 const Details = controlDetail()
 
 // 主页卡片 //////////////////////////////////////////////////////////////////
@@ -19,19 +23,42 @@ const disabled = ref(true); // 初始禁用滚动加载
 const columns = ref(0)
 const card_columns = ref({})
 const arrHeight = ref([])
-//我觉得可以根据标签，获得所有卡片，日常卡片，选课卡片之类的，然后根据tab的选择显示卡片
+// 加载动画相关变量
+const loading = ref(false);
+const loadingContainer = ref(null);
+let loadingInstance: any = null;
+
 // 主页获取帖子
-const doQuery = async (offset) => {
-  const res = await queryPost({offset, query});
-  cards.value = res.info;
-  waterFallInit(columns, card_columns, arrHeight, cards)
-  disabled.value = false; // 启用滚动加载
+const doQuery = async (offset,category) => {
+  try {
+    loading.value = true;
+    loadingInstance = ElLoading.service({
+      target: loadingContainer.value,
+      lock: true,
+      text: '加载中...',
+      background: 'rgba(0, 0, 0, 0.7)',
+    });
+    const res = await queryPost({offset, category,query});
+    console.log(res);
+    cards.value = res.info;
+    console.log('卡片详情',cards.value[0].title);
+    waterFallInit(columns, card_columns, arrHeight, cards)
+    disabled.value = false; // 启用滚动加载
+  } catch (error) {
+    console.error('Error fetching messages:', error);
+  } finally {
+    loading.value = false;
+    if (loadingInstance) {
+      loadingInstance.close();
+    }
+  }
 };
 // 无限滚动
 const load = async () => {
   disabled.value = true;
   const offset = cards.value.length;
-  const res = await queryPost({offset, query});
+  const category = activeName.value
+  const res = await queryPost({offset,category, query});
   const more = res.info;
   if (more.length === 0) {
     disabled.value = true; // 没有更多数据，禁用滚动加载
@@ -108,18 +135,21 @@ const onAfterLeave = () => {
 }
 
 // 卡片详情结束 //////////////////////////////////////////////////////////////////
+
 // onMounted()钩子函数，在组件挂载后执行某些操作
 // async()=>{}异步函数
 onMounted(async () => {
-  await doQuery(0);  //等待doQuery完成
+  await doQuery(0,activeName.value);  //等待doQuery完成
   resizeWaterFall(columns, card_columns, arrHeight, cards)
   // 调整瀑布流布局
 });
 
-const activeName = ref('first')
+const activeName = ref('')
 
-const handleClick = (tab) => {
-  console.log(tab.props.name) //这个就是el-tab-pane中的name
+const handleClick = async (tab) => {
+  activeName.value = tab.props.name;
+  await doQuery(0,activeName.value); // 重新加载数据
+  console.log(tab.props.name,'',activeName.value) //这个就是el-tab-pane中的name
 }
 </script>
 
@@ -127,13 +157,13 @@ const handleClick = (tab) => {
   <div>
     <!-- 标签页提供选项卡功能 -->
     <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
-      <el-tab-pane label="所有" name="first" ></el-tab-pane>
-      <el-tab-pane label="日常" name="second"></el-tab-pane>
-      <el-tab-pane label="学习" name="third"></el-tab-pane>
-      <el-tab-pane label="选课" name="fourth"></el-tab-pane>
-      <el-tab-pane label="拼车" name="fifth"></el-tab-pane>
-      <el-tab-pane label="实习" name="sixth"></el-tab-pane>
-      <el-tab-pane label="交友" name="seventh"></el-tab-pane>
+      <el-tab-pane label="所有" name="" ></el-tab-pane>
+      <el-tab-pane label="日常" name="日常"></el-tab-pane>
+      <el-tab-pane label="学习" name="学习"></el-tab-pane>
+      <el-tab-pane label="选课" name="选课"></el-tab-pane>
+      <el-tab-pane label="拼车" name="拼车"></el-tab-pane>
+      <el-tab-pane label="实习" name="实习"></el-tab-pane>
+      <el-tab-pane label="交友" name="交友"></el-tab-pane>
     </el-tabs>
     <div class="Empty" v-if="cards.length === 0">
       <el-empty description="没有帖子..."/>
@@ -185,6 +215,10 @@ const handleClick = (tab) => {
   /* 字体族暂不起作用 */
 }
 
+.demo-tabs{
+  box-sizing: border-box;
+}
+
 .demo-tabs > .el-tabs__content {
   padding: 32px;
   color: #6b778c;
@@ -208,14 +242,18 @@ const handleClick = (tab) => {
   position: fixed;
   top: 5%;
   left: 3%;
+  display: flex;
   justify-content: center;
   align-items: center;
   width: 40px;
   height: 40px;
-  border-radius: 40px;
+  border-radius: 50%;
   border: 1px solid var(--color-border);
   cursor: pointer;
   transition: all .3s;
+  background-color: #2f779d;
+  color: #ffffff;
+  font-size: 20px; /* 调整图标大小 */
 }
 
 .fade-enter-active {

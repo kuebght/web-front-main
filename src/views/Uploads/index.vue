@@ -9,9 +9,17 @@ import { ElMessage } from "element-plus";
 import CardDetail from "@/components/cardDetail.vue";
 import { getCurrentTime } from "@/utils/getTime";
 import { uploadPost } from "@/apis/main";
+import { getAllId, setAdmin, block, unblock } from "@/apis/main";
+import {
+  getFocusInfo
+} from "@/apis/main";
 
 const router = useRouter()
 const userStore = useUserStore()
+
+
+
+
 const checkLogin = () => {
   if (!userStore.userInfo.id) {
     router.replace('/login')
@@ -89,7 +97,9 @@ const doUploads = async () => {
     user_id: userStore.userInfo.id,
     category: valueTopic.value,
     user: valueUser.value,
+
     // emoji: valueEmoji.value,
+
   }
 
   const res = await uploadPost(data)
@@ -143,6 +153,10 @@ const valueTopic = ref('')
 const valueUser = ref('')
 const valueEmoji = ref('')
 const topics = [
+{
+    value: "日常",
+    label: "日常"
+  },
   {
     value: "学习",
     label: "学习"
@@ -164,7 +178,16 @@ const topics = [
     label: "交友"
   },
 ]
+const followInfo = ref([]);
 //获取用户信息
+const fetchFollowers = async () => {
+  console.log(userStore.userInfo.id);
+  const post = await getFocusInfo({ id: userStore.userInfo.id })
+  followInfo.value = post.info
+  console.log(followInfo.value);
+}
+fetchFollowers();
+
 
 
 const user = [
@@ -177,6 +200,7 @@ const user = [
     label: "er"
   }
 ]
+
 
 const emoji = [
   {
@@ -248,7 +272,9 @@ const afterDoComment = (comment) => Details.afterDoComment(comment);
           <el-option v-for="item in topics" :key="item.value" :label="item.label" :value="item.value"></el-option>
         </el-select>
         <el-select v-model="valueUser" placeholder="@用户" style="width: 100px; height: 30px;margin-right: 20px;">
-          <el-option v-for="item in user" :key="item.value" :label="item.label" :value="item.value"></el-option>
+          <el-option v-for="item in followInfo" :key="item.value" :label="item.label"
+            :value="item.username"></el-option>
+
         </el-select>
 
         <el-select v-model="valueEmoji" placeholder="😊表情" style="width: 100px; height: 30px;margin-right: 20px;">
@@ -356,6 +382,7 @@ const afterDoComment = (comment) => Details.afterDoComment(comment);
   width: 550px;
   height: 150px;
   margin: 22px;
+
 }
 
 /* 预览层卡牌 */

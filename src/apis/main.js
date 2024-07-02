@@ -64,11 +64,11 @@ export const postDetail = ({id}) => {
 }
 
 // 主页帖子
-export const queryPost = ({offset, query}) => {
+export const queryPost = ({offset,category, query}) => {
     return http({
         url: '/post/',
         method: 'POST',
-        data: {offset, query}
+        data: {offset,category, query}
     })
 }
 
@@ -150,14 +150,109 @@ export const getComment = ({id, offset}) => {
         }
     })
 }
+//获取被评论消息
+export const getCommentInfo = ({id}) => {
+    return http({
+        url: '/getCommentInfo/',
+        method: 'POST',
+        data: {
+            id,
+        }
+    })
+}
+//获取被点赞消息
+export const getLikeInfo = ({id}) => {
+    return http({
+        url: '/getLikeInfo/',
+        method: 'POST',
+        data: {
+            id,
+        }
+    })
+}
+//获取被收藏消息
+export const getCollectInfo = ({id}) => {
+    return http({
+        url: '/getCollectInfo/',
+        method: 'POST',
+        data: {
+            id,
+        }
+    })
+}
+//获取被关注消息
+export const getFocusInfo = ({id}) => {
+    return http({
+        url: '/getFocusInfo/',
+        method: 'POST',
+        data: {
+            id,
+        }
+    })
+}
 
-export const queryUserPostControl = ({offset, types}) => {
+//获取关注消息
+export const getFollowsInfo = ({id}) => {
+    return http({
+        url: '/getFollowsInfo/',
+        method: 'POST',
+        data: {
+            id,
+           }
+    })
+}
+
+
+//获取所有用户id
+export const getAllId = ({id}) => {
+    return http({
+        url: '/admin/getAllUsers/',
+        method: 'POST',
+        data: {
+            id
+        }
+    })
+}
+
+//设为管理员
+export const setAdmin = ({id}) => {
+    return http({
+        url: '/admin/set_admin/',
+        method: 'POST',
+        data: {
+            id
+        }
+    })
+}
+
+//拉黑
+export const block = ({id}) => {
+    return http({
+        url: '/admin/block/',
+        method: 'POST',
+        data: {
+            id
+        }
+    })
+}
+//取消拉黑
+export const unblock = ({id}) => {
+    return http({
+        url: '/admin/unblock/',
+        method: 'POST',
+        data: {
+            id
+        }
+    })
+}
+export const queryUserPostControl = ({offset, types, id}) => {
     return http({
         url: '/user/post/control/',
         method: 'POST',
         data: {
             offset,
-            types
+            types,
+            id
         }
     })
 }
