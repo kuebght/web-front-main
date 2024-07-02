@@ -6,7 +6,8 @@ import { ElMessage } from 'element-plus'
 
 
 const http = axios.create({
-    baseURL: '/api',
+    // baseURL: '/api',
+    baseURL: 'http://123.60.149.233:8000',
     timeout: 5000,
 })
 
@@ -16,6 +17,7 @@ http.interceptors.request.use(config => {
     if (userStore.userInfo.token) {
         config.headers.Authorization = `Bearer ${userStore.userInfo.token}`
     }
+    // console.log(`Request URL: ${config.baseURL}${config.url}`);
     return config
 }, e => Promise.reject(e))
 

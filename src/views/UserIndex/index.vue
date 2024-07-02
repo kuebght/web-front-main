@@ -584,10 +584,12 @@ const delFocusOnAdv = async (id) => {
         <RouterLink :to="`/user/index/${focus.id}`">
           <img :src="focus.avatar" alt="avatar" class="avatar" />
         </RouterLink>
-        <p style="margin-left: 5%; margin-right: 5%;">用户昵称: {{ focus.username }}</p>
-        <p style="margin-left: 5%; margin-right: 5%;">关注时间: {{ focus.createTime }}</p>
-        <p style="margin-left: 5%; margin-right: 5%;">{{ focus.back ? "已互粉" : " " }}</p>
-        <button class="delBtn" @click="delFocusOnAdv(focus.id)" style="position: absolute; right: 7%;">取关</button>
+        <div class="user-info">
+          <p>用户昵称: {{ focus.username }}</p>
+          <p>关注时间: {{ focus.createTime }}</p>
+          <p>{{ focus.back ? "已互粉" : "" }}</p>
+        </div>
+        <button class="delBtn" @click="delFocusOnAdv(focus.id)">取关</button>
       </div>
     </div>
     <template #footer>
@@ -602,10 +604,13 @@ const delFocusOnAdv = async (id) => {
         <RouterLink :to="`/user/index/${follow.id}`">
           <img :src="follow.avatar" alt="avatar" class="avatar" />
         </RouterLink>
-        <p style="margin-left: 5%; margin-right: 5%;">用户昵称: {{ follow.username }}</p>
-        <p style="margin-left: 5%; margin-right: 5%;">关注时间: {{ follow.createTime }}</p>
-        <p style="margin-left: 12%; margin-right: 5%;" v-if="follow.back">已互粉</p>
-        <button class="addBtn" style="position: absolute; right: 12%;" @click="doFocusOnAdv(follow.id)" v-else>关注</button>
+        <div class="user-info">
+          <p>用户昵称: {{ follow.username }}</p>
+          <p>关注时间: {{ follow.createTime }}</p>
+          <p>{{ follow.back ? "已互粉" : "" }}</p>
+        </div>
+        <button class="addBtn" @click="doFocusOnAdv(follow.id)" :disabled="follow.back">
+          {{ follow.back ? "已关注" : "关注" }}</button>
       </div>
     </div>
     <template #footer>
@@ -879,14 +884,15 @@ input[type="checkbox"] {
 .user-item {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   padding: 15px;
   border-bottom: 1px solid #eaeaea;
   transition: background-color 0.3s;
+  position: relative;
 }
 
 .user-item:last-child {
   border-bottom: none;
-  /* 移除最后一个用户项的底部边框 */
 }
 
 .avatar {
@@ -896,14 +902,14 @@ input[type="checkbox"] {
   margin-right: 20px;
 }
 
-.username-info {
-  flex: 1;
+.user-info {
   display: flex;
   flex-direction: column;
-  margin-right: 20px;
+  flex: 1;
+  margin-left: 20px;
 }
 
-.username-info p {
+.user-info p {
   margin: 4px 0;
   font-size: 14px;
   color: #333;
@@ -927,6 +933,11 @@ input[type="checkbox"] {
 
 .addBtn:hover {
   background-color: #2f779db6;
+}
+
+.addBtn:disabled {
+  cursor: not-allowed;
+  background-color: grey;
 }
 
 .delBtn {
