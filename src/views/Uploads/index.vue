@@ -97,6 +97,9 @@ const doUploads = async () => {
     user_id: userStore.userInfo.id,
     category: valueTopic.value,
     user: valueUser.value,
+
+    // emoji: valueEmoji.value,
+
   }
 
   const res = await uploadPost(data)
@@ -184,6 +187,19 @@ const fetchFollowers = async () => {
   console.log(followInfo.value);
 }
 fetchFollowers();
+
+
+
+const user = [
+  {
+    value: "用户1",
+    label: "wer"
+  },
+  {
+    value: "用户2",
+    label: "er"
+  }
+]
 
 
 const emoji = [
@@ -363,7 +379,10 @@ const afterDoComment = (comment) => Details.afterDoComment(comment);
 }
 
 .preview {
-  margin: 0 auto;
+  width: 550px;
+  height: 150px;
+  margin: 22px;
+
 }
 
 /* 预览层卡牌 */
