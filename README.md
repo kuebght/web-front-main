@@ -2,8 +2,8 @@
 
 ## 此仓库是前端代码
 
-## 后端代码仓库
-[后端代码仓库](https://github.com/xishandong/Django_Server_redbook)
+## 完整代码仓库
+[完整代码仓库](https://github.com/Chenxiao2002/TJ_web2024_team8)
 
 ### 使用
 
